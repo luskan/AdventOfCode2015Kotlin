@@ -3,7 +3,7 @@ package com.marcinj.adventofcode2015
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class Day1KtTest {
+class Day1Test {
 
     @Test
     fun `test 1`() = assertEquals(0, calculateFloor("(())"))
