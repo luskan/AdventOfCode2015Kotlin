@@ -10,7 +10,13 @@ enum class GateType {
 }
 data class CircuitData (
     val gateType: GateType, val op1: String, val op2: String, val result: String
-)
+) {
+    fun op(ind: Int) = when (ind) {
+        0 -> op1
+        1 -> op2
+        else -> fail("Only index 0 and 1 is allowed")
+    }
+}
 
 fun parseCircuitData(data: String) : List<CircuitData> {
     val circuitDataArray = mutableListOf<CircuitData>()
@@ -52,36 +58,26 @@ fun calculateValueForCircuitData(
     cache: HashMap<String, UShort>,
     circuitData: CircuitData
 ) : UShort {
-    var v1: UShort? = circuitData.op1.toUShortOrNull()
-    if (v1 == null && !circuitData.op1.isBlank()) {
-        check(resultToGateMap.containsKey(circuitData.op1))
-        if (cache.containsKey(circuitData.op1)) {
-            v1 = cache[circuitData.op1]
+    if (cache.containsKey(circuitData.result))
+        return cache[circuitData.result]!!
+
+    val v = arrayOf<UShort>(0u, 0u)
+    for (i in 0..1) {
+        var vop = circuitData.op(i).toUShortOrNull()
+        if (vop == null && circuitData.op(i).isNotBlank()) {
+           vop = calculateValueForCircuitData(resultToGateMap, cache, resultToGateMap[circuitData.op(i)]!!)
+           cache[circuitData.op(i)] = vop
         }
-        else {
-            v1 = calculateValueForCircuitData(resultToGateMap, cache, resultToGateMap[circuitData.op1]!!)
-            cache[circuitData.op1] = v1
-        }
-    }
-    var v2: UShort? = circuitData.op2.toUShortOrNull()
-    if (v2 == null && !circuitData.op2.isBlank()) {
-        check(resultToGateMap.containsKey(circuitData.op2))
-        if (cache.containsKey(circuitData.op2)) {
-            v2 = cache[circuitData.op2]
-        }
-        else {
-            v2 = calculateValueForCircuitData(resultToGateMap, cache, resultToGateMap[circuitData.op2]!!)
-            cache[circuitData.op2] = v2
-        }
+        v[i] = vop ?: 0u
     }
 
     return when(circuitData.gateType) {
-        GateType.assign -> v2!!
-        GateType.and -> v1!! and v2!!
-        GateType.or -> v1!! or v2!!
-        GateType.lshift -> (v1!!.toUInt() shl v2!!.toInt()).toUShort()
-        GateType.rshift -> (v1!!.toUInt() shr v2!!.toInt()).toUShort()
-        GateType.not -> v2!!.inv()
+        GateType.assign -> v[1]
+        GateType.and -> v[0] and v[1]
+        GateType.or -> v[0] or v[1]
+        GateType.lshift -> (v[0].toUInt() shl v[1].toInt()).toUShort()
+        GateType.rshift -> (v[0].toUInt() shr v[1].toInt()).toUShort()
+        GateType.not -> v[1].inv()
     }
 }
 
