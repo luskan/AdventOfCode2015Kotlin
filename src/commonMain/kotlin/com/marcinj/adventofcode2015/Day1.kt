@@ -36,6 +36,6 @@ internal fun calculateEnterBasementIndex(data: String) : Int {
 fun runday1() {
     val data = readAllText("/day1.txt")
     println(" --- Day1 ---")
-    println("result for part 1: ${calculateFloor(data)}")
-    println("result for part 2: ${calculateEnterBasementIndex(data)}")
+    println("result for part 1: ${calculateFloor(data)}") //280
+    println("result for part 2: ${calculateEnterBasementIndex(data)}") //1797
 }

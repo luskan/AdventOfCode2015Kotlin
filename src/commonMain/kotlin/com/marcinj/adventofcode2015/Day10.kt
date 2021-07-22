@@ -49,7 +49,7 @@ fun runday10() {
     println(" --- Day10 ---")
     val data = "1321131112"
     println("result for part 1: ${calculateElvesLookAndSayGamePart1(data, 40).length}") //492982
-    println("result for part 2: ${calculateElvesLookAndSayGamePart1(data, 50).length}") //
+    println("result for part 2: ${calculateElvesLookAndSayGamePart1(data, 50).length}") //6989950
 }
 
 
