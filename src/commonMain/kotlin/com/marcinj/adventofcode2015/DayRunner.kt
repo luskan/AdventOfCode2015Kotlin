@@ -10,4 +10,6 @@ fun dayrunner() {
     runday7()
     runday8()
     runday9()
+    runday10()
+    runday11()
 }
