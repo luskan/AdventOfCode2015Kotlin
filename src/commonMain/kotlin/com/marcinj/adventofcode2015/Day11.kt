@@ -85,9 +85,9 @@ fun calculateSantaNewPassword(data: String) : String {
 fun runday11() {
     println(" --- Day11 ---")
     var data = "cqjxjnds"
-    println("result for part 1: ${calculateSantaNewPassword(data)}") //cqjxxyzz
+    println("result for part 1: ${verifyResult("cqjxxyzz", calculateSantaNewPassword(data))}") //cqjxxyzz
     data = "cqjxxyzz"
-    println("result for part 2: ${calculateSantaNewPassword(data)}") //cqkaabcc
+    println("result for part 2: ${verifyResult("cqkaabcc", calculateSantaNewPassword(data))}") //cqkaabcc
 }
 
 

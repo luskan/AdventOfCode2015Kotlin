@@ -49,8 +49,8 @@ fun calculateSumOfAllNumbersPart2(data: String) : Int {
 fun runday12() {
     val data = readAllText("/day12.txt")
     println(" --- Day12 ---")
-    println("result for part 1: ${calculateSumOfAllNumbersPart1(data)}") // 191164
-    println("result for part 2: ${calculateSumOfAllNumbersPart2(data)}") //
+    println("result for part 1: ${verifyResult(191164, calculateSumOfAllNumbersPart1(data))}") // 191164
+    println("result for part 2: ${verifyResult(87842, calculateSumOfAllNumbersPart2(data))}") //87842
 }
 
 

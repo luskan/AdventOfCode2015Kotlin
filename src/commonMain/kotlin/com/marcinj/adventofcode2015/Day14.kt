@@ -82,8 +82,8 @@ fun calculateWinningReindeerTravelDistancePart2(data: String, raceDurationInSeco
 fun runday14() {
     val data = readAllText("/day14.txt")
     println(" --- Day14 ---")
-    println("result for part 1: ${calculateWinningReindeerTravelDistancePart1(data, 2503)}")
-    println("result for part 2: ${calculateWinningReindeerTravelDistancePart2(data, 2503)}")
+    println("result for part 1: ${verifyResult(2660, calculateWinningReindeerTravelDistancePart1(data, 2503))}")
+    println("result for part 2: ${verifyResult(1256, calculateWinningReindeerTravelDistancePart2(data, 2503))}")
 }
 
 

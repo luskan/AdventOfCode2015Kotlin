@@ -37,7 +37,7 @@ internal fun calculateLengthOfRibbon(data: String): Int {
 fun runday2() {
     val data = readAllText("/day2.txt")
     println(" --- Day2 ---")
-    println("result for part 1: ${calculateAreaOfWrappingPaper(data)}") // 1586300
-    println("result for part 2: ${calculateLengthOfRibbon(data)}") // 3737498
+    println("result for part 1: ${verifyResult(1586300, calculateAreaOfWrappingPaper(data))}") // 1586300
+    println("result for part 2: ${verifyResult(3737498, calculateLengthOfRibbon(data))}") // 3737498
 }
 

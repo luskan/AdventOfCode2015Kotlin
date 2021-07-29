@@ -75,7 +75,7 @@ internal fun calculateNiceWordsPart2(data: String): Int {
 fun runday5() {
     val data = readAllText("/day5.txt")
     println(" --- Day5 ---")
-    println("result for part 1: ${calculateNiceWords(data)}") //236
-    println("result for part 2: ${calculateNiceWordsPart2(data)}") //51
+    println("result for part 1: ${verifyResult(236, calculateNiceWords(data))}") //236
+    println("result for part 2: ${verifyResult(51, calculateNiceWordsPart2(data))}") //51
 }
 

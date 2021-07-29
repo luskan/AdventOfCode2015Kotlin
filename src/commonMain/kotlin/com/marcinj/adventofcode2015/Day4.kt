@@ -32,7 +32,7 @@ internal fun calculateSecretSaltPart2(data: String): Int {
 
 fun runday4() {
     println(" --- Day4 ---")
-    println("result for part 1: ${calculateSecretSalt("bgvyzdsv")}") //254575
-    println("result for part 2: ${calculateSecretSaltPart2("bgvyzdsv")}") //1038736
+    println("result for part 1: ${verifyResult(254575, calculateSecretSalt("bgvyzdsv"))}") //254575
+    println("result for part 2: ${verifyResult(1038736, calculateSecretSaltPart2("bgvyzdsv"))}") //1038736
 }
 

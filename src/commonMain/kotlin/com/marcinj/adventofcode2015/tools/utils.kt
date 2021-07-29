@@ -65,3 +65,8 @@ fun <T> permutations(list: List<T>): List<List<T>> {
     }
     return result
 }
+
+fun <T> verifyResult(expected: T, actual: T) : T {
+    check( expected == actual, {"Expected: $expected but got $actual"})
+    return actual
+}

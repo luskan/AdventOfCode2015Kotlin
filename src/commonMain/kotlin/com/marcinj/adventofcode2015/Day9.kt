@@ -76,8 +76,8 @@ fun calculateSantasShortestPathPart2(data: String) : Int {
 fun runday9() {
     val data = readAllText("/day9.txt")
     println(" --- Day9 ---")
-    println("result for part 1: ${calculateSantasShortestPathPart1(data)}") // 117
-    println("result for part 2: ${calculateSantasShortestPathPart2(data)}") // 909
+    println("result for part 1: ${verifyResult(117, calculateSantasShortestPathPart1(data))}") // 117
+    println("result for part 2: ${verifyResult(909, calculateSantasShortestPathPart2(data))}") // 909
 }
 
 

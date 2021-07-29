@@ -68,7 +68,7 @@ internal fun calculateVisitedHomesPart2(data: String): Int {
 fun runday3() {
     val data = readAllText("/day3.txt")
     println(" --- Day3 ---")
-    println("result for part 1: ${calculateVisitedHomes(data)}") //2592
-    println("result for part 2: ${calculateVisitedHomesPart2(data)}") //2360
+    println("result for part 1: ${verifyResult(2592, calculateVisitedHomes(data))}") //2592
+    println("result for part 2: ${verifyResult(2360, calculateVisitedHomesPart2(data))}") //2360
 }
 

@@ -91,7 +91,7 @@ fun calculateLampsPart2(data: String): Int {
 fun runday6() {
     val data = readAllText("/day6.txt")
     println(" --- Day6 ---")
-    println("result for part 1: ${calculateLamps(data)}") // 569999
-    println("result for part 2: ${calculateLampsPart2(data)}") // 17836115
+    println("result for part 1: ${verifyResult(569999, calculateLamps(data))}") // 569999
+    println("result for part 2: ${verifyResult(17836115, calculateLampsPart2(data))}") // 17836115
 }
 

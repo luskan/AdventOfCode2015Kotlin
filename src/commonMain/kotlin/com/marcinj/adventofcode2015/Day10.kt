@@ -48,8 +48,8 @@ fun calculateElvesLookAndSayGamePart1(data: String, iterations: Int) : String {
 fun runday10() {
     println(" --- Day10 ---")
     val data = "1321131112"
-    println("result for part 1: ${calculateElvesLookAndSayGamePart1(data, 40).length}") //492982
-    println("result for part 2: ${calculateElvesLookAndSayGamePart1(data, 50).length}") //6989950
+    println("result for part 1: ${verifyResult(492982,calculateElvesLookAndSayGamePart1(data, 40).length)}") //492982
+    println("result for part 2: ${verifyResult(6989950, calculateElvesLookAndSayGamePart1(data, 50).length)}") //6989950
 }
 
 

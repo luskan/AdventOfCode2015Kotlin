@@ -101,8 +101,8 @@ fun calculateOptimalGuestArrangementTotalHappinesPart2(data: String) : Int {
 fun runday13() {
     val data = readAllText("/day13.txt")
     println(" --- Day13 ---")
-    println("result for part 1: ${calculateOptimalGuestArrangementTotalHappinesPart1(data)}") //618
-    println("result for part 2: ${calculateOptimalGuestArrangementTotalHappinesPart2(data)}") //601
+    println("result for part 1: ${verifyResult(618, calculateOptimalGuestArrangementTotalHappinesPart1(data))}") //618
+    println("result for part 2: ${verifyResult(601, calculateOptimalGuestArrangementTotalHappinesPart2(data))}") //601
 }
 
 

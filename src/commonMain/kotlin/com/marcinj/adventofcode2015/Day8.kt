@@ -34,8 +34,8 @@ fun calculateSantasMemoryListSizePart2(data: String): Int {
 fun runday8() {
     val data = readAllText("/day8.txt")
     println(" --- Day8 ---")
-    println("result for part 1: ${calculateSantasMemoryListSizePart1(data)}") // 1350
-    println("result for part 2: ${calculateSantasMemoryListSizePart2(data)}") // 2085
+    println("result for part 1: ${verifyResult(1350, calculateSantasMemoryListSizePart1(data))}") // 1350
+    println("result for part 2: ${verifyResult(2085, calculateSantasMemoryListSizePart2(data))}") // 2085
 }
 
 

@@ -115,7 +115,7 @@ fun calculateCircuitPart2(data: String) : UShort {
 fun runday7() {
     val data = readAllText("/day7.txt")
     println(" --- Day7 ---")
-    println("result for part 1: ${calculateCircuit(data, "a")}") //956
-    println("result for part 2: ${calculateCircuitPart2(data)}") //40149
+    println("result for part 1: ${verifyResult(956u, calculateCircuit(data, "a"))}") //956
+    println("result for part 2: ${verifyResult(40149u, calculateCircuitPart2(data))}") //40149
 }
 
