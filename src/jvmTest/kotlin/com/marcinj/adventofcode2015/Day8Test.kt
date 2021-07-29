@@ -17,7 +17,7 @@ class Day8Test {
 
         assertEquals(1, calculateSantasMemoryListSize(""""\x27""""))
 
-        assertEquals(16, calculateSantasMemoryListSize(""""njro\x68qgbx\xe4af\"\\suan""""))
+        assertEquals(18, calculateSantasMemoryListSize(""""njro\x68qgbx\xe4af\"\\suan""""))
 
         assertEquals(27, calculateSantasMemoryListSize(""""\x22unqdlsrvgzfaohoffgxzfpir\"s""""))
 

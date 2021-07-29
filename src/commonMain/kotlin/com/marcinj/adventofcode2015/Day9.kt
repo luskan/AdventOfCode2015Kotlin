@@ -2,6 +2,7 @@ package com.marcinj.adventofcode2015
 
 import com.marcinj.adventofcode2015.tools.fail
 import com.marcinj.adventofcode2015.tools.readAllText
+import kotlin.time.ExperimentalTime
 
 // https://adventofcode.com/2015/day/9
 
@@ -35,7 +36,6 @@ fun calculateSantasShortestPath(data: String, shortest: Boolean) : Int {
     val perms = permutations(cityList)
 
     var bestDistance = if (shortest) Int.MAX_VALUE else 0
-    var best: List<String>? = null
     perms.forEachIndexed { index, permList ->
         var prev: String? = null
 
@@ -59,7 +59,6 @@ fun calculateSantasShortestPath(data: String, shortest: Boolean) : Int {
         }
         if (distance < bestDistance && shortest || distance > bestDistance && !shortest) {
             bestDistance = distance
-            best = permList
         }
     }
 
