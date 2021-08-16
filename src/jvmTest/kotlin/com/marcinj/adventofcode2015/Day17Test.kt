@@ -11,11 +11,28 @@ class Day17Test {
         10
         5
         5
+        25
     """.trimIndent()
 
     @Test
     fun `Test part 1`() {
         assertEquals(4, calculateNumberOfContainers(data, 25).fittingCount)
+    }
+
+    @Test
+    fun `Test2 part 1`() {
+        assertEquals(4, calculateNumberOfContainersUsingDynamicProgramming(data, 25).fittingCount)
+    }
+
+    @Test
+    fun `Test part 1 using dynamic programming`() {
+        val data = """
+        2
+        4
+        6
+    """.trimIndent()
+
+        assertEquals(1, calculateNumberOfContainersUsingDynamicProgramming(data, 10).fittingCount)
     }
 
     @Test
