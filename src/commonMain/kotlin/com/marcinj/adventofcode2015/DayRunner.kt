@@ -1,7 +1,7 @@
 package com.marcinj.adventofcode2015
 
 fun dayrunner() {
-    /*runday1()
+    runday1()
     runday2()
     runday3()
     runday4()
@@ -17,6 +17,6 @@ fun dayrunner() {
     runday14()
     runday15()
     runday16()
-    runday17()*/
+    runday17()
     runday18()
 }

@@ -11,7 +11,6 @@ class Day17Test {
         10
         5
         5
-        25
     """.trimIndent()
 
     @Test
