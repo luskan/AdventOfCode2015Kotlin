@@ -19,4 +19,5 @@ fun dayrunner() {
     runday16()
     runday17()
     runday18()
+    runday19()
 }
