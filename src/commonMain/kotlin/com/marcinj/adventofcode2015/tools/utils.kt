@@ -66,6 +66,59 @@ fun <T> permutations(list: List<T>): List<List<T>> {
     return result
 }
 
+/***
+ * @param values and @maxValues must be of same length
+ */
+data class SetPermute(val values:MutableList<Int>, val minValues:List<Int>, val maxValues:List<Int>) {
+    init {
+        if (minValues.size != maxValues.size)
+            throw IllegalArgumentException()
+    }
+}
+
+/***
+ * Given @param setPermute, function computes next value.
+ * Values are being incremented in each field according to maxValues.
+ * So setPermute.values[0] will be incremented in each call untill setPermute.maxValues[0] will be reached.
+ * Then setPermute.values[0] will be set to setPermute.minValues[0] and setPermute.values[1] will be incremented,
+ * etc...
+ *
+ * setPermute.values can be non initialized, nextPermutation will add new values as needed - in such case first call
+ * will set initial setPermute.minvalues to first field, or it can contain
+ * values initialized to setPermute.minValues[0] ...
+ *
+ * @return true if more permutations are possible, otherwise false is returned
+ */
+fun nextPermutation(setPermute: SetPermute): Boolean {
+    if (setPermute.values.size == 0) {
+        setPermute.values.addAll(setPermute.minValues)
+        return true
+    }
+
+    if (setPermute.values.equals(setPermute.maxValues))
+        return false
+
+    for (n in setPermute.values.size-1 downTo 0) {
+        if (setPermute.values[n] == setPermute.maxValues[n]) {
+            setPermute.values[n] = setPermute.minValues[n]
+            if (n == 0) {
+                val minValIndex = setPermute.values.size
+                setPermute.values.add(0, setPermute.minValues[minValIndex] + 1)
+            }
+            //else {
+            //    setPermute.values[n - 1]++
+            //}
+            //break
+        }
+        else {
+            setPermute.values[n]++
+            break
+        }
+    }
+
+    return true
+}
+
 fun <T> verifyResult(expected: T, actual: T) : T {
     check( expected == actual, {"Expected: $expected but got $actual"})
     return actual
