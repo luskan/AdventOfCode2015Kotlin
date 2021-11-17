@@ -120,7 +120,7 @@ fun calculateGoldRequired(data: String, part2: Boolean): Int {
     return bestSpend
 }
 
-fun fightWithBoss(playerHpVal: Int, playerItems: MutableList<ShopItem>, bossData: BossData): Boolean {
+private fun fightWithBoss(playerHpVal: Int, playerItems: MutableList<ShopItem>, bossData: BossData): Boolean {
     var playerHp = playerHpVal
     var bossHp = bossData.hp
 
