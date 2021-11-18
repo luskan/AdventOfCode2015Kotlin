@@ -22,12 +22,22 @@ private data class WizardGameData(
     var bossDamage: Int = 0,
     var activeSpells: MutableList<SpellBase> = mutableListOf(),
     var initialMana: Int = playerMana,
-    var spentMana: Int = 0) {
+    var spentMana: Int = 0
+    ) {
 
-    fun deepClone() : WizardGameData {
-        val wg = copy()
-        wg.activeSpells = activeSpells.map { it.clone() }.toMutableList()
-        return wg
+    fun deepClone(baseGameData: WizardGameData) : WizardGameData {
+        baseGameData.playerHp = playerHp
+        baseGameData.playerMana = playerMana
+        baseGameData.playerArmor = playerArmor
+        baseGameData.bossHp = bossHp
+        baseGameData.bossDamage = bossDamage
+        baseGameData.activeSpells.clear()
+        baseGameData.initialMana = initialMana
+        baseGameData.spentMana = spentMana
+
+        activeSpells.forEach { baseGameData.activeSpells.add(it.clone()) }
+
+        return baseGameData
     }
 }
 
@@ -154,14 +164,19 @@ fun calculateMinManaRequired(playerHp: Int, playerMana: Int, bossHp: Int, bossDa
     return fightWithBoss(gameData, part2)
 }
 
-private fun fightWithBoss(gameData: WizardGameData, part2: Boolean): Int {
+private fun fightWithBoss(gameData: WizardGameData, part2: Boolean,
+                          totalBestMinMana: Array<Int> = arrayOf(9999)): Int {
+    if (gameData.spentMana >= totalBestMinMana[0])
+        return -1
+
+    val baseGameData = WizardGameData()
 
     val manaResults = mutableListOf<Int>()
     SpellType.values().forEachIndexed spellFor@{index, spellType ->
         // Check if spell can be casted (its not used, and player has enough mana)
 
         // Make a deep copy of gameData for a new duel branch
-        val newGameData = gameData.deepClone()
+        val newGameData = gameData.deepClone(baseGameData)
 
         //
         // Player turn, cast a spell and apply damage from spells to boss
@@ -171,6 +186,7 @@ private fun fightWithBoss(gameData: WizardGameData, part2: Boolean): Int {
                 return@spellFor
             }
         }
+
         newGameData.activeSpells.forEach { spell -> spell.update(newGameData) }
         newGameData.activeSpells.removeAll { it.isComplete() }
 
@@ -213,11 +229,16 @@ private fun fightWithBoss(gameData: WizardGameData, part2: Boolean): Int {
         newGameData.activeSpells.removeAll { it.isComplete() }
 
         // Start next round
-        val manaRes = fightWithBoss(newGameData, part2)
+        val manaRes = fightWithBoss(newGameData, part2, totalBestMinMana)
         if (manaRes != -1)
             manaResults.add(manaRes)
     }
-    return manaResults.minOfOrNull{ it } ?: -1
+    val bestMinMana = manaResults.minOfOrNull{ it } ?: -1
+    if (bestMinMana != -1) {
+        if (bestMinMana < totalBestMinMana[0])
+            totalBestMinMana[0] = bestMinMana
+    }
+    return bestMinMana
 }
 
 fun runday22() {
