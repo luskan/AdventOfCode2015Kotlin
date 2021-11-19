@@ -3,7 +3,11 @@ package com.marcinj.adventofcode2015
 import com.marcinj.adventofcode2015.tools.fail
 
 enum class SpellType(val mana: Int) {
-    MagicMissle(53), Drain(73), Shield(113), Poison(173), Recharge(229)
+    MagicMissle(53), Drain(73), Shield(113), Poison(173), Recharge(229);
+
+    override fun toString(): String {
+        return "$name($mana)"
+    }
 }
 
 private interface SpellBase {
@@ -22,7 +26,8 @@ private data class WizardGameData(
     var bossDamage: Int = 0,
     var activeSpells: MutableList<SpellBase> = mutableListOf(),
     var initialMana: Int = playerMana,
-    var spentMana: Int = 0
+    var spentMana: Int = 0,
+    var spendManaSpells: MutableList<SpellType> = mutableListOf()
     ) {
 
     fun deepClone(baseGameData: WizardGameData) : WizardGameData {
@@ -35,7 +40,10 @@ private data class WizardGameData(
         baseGameData.initialMana = initialMana
         baseGameData.spentMana = spentMana
 
+        baseGameData.activeSpells.clear()
         activeSpells.forEach { baseGameData.activeSpells.add(it.clone()) }
+        baseGameData.spendManaSpells.clear()
+        spendManaSpells.forEach { baseGameData.spendManaSpells.add(it) }
 
         return baseGameData
     }
@@ -159,41 +167,38 @@ private fun createSpellFromType(type: SpellType) = when(type) {
     SpellType.Recharge -> RechargeMissle()
 }
 
-fun calculateMinManaRequired(playerHp: Int, playerMana: Int, bossHp: Int, bossDamage: Int, part2: Boolean): Int {
+fun calculateMinManaRequired(playerHp: Int, playerMana: Int, bossHp: Int, bossDamage: Int, part2: Boolean): ManaResult {
     val gameData = WizardGameData(playerHp, playerMana, 0, bossHp, bossDamage)
     return fightWithBoss(gameData, part2)
 }
-
+data class ManaResult(var mana: Int = 9999, var spells: List<SpellType> = listOf(), var failed: Boolean = false)
 private fun fightWithBoss(gameData: WizardGameData, part2: Boolean,
-                          totalBestMinMana: Array<Int> = arrayOf(9999)): Int {
-    if (gameData.spentMana >= totalBestMinMana[0])
-        return -1
+                          totalBestMinMana: ManaResult = ManaResult()): ManaResult {
+    if (gameData.spentMana >= totalBestMinMana.mana)
+        return ManaResult(failed = true)
 
     val baseGameData = WizardGameData()
 
-    val manaResults = mutableListOf<Int>()
-    SpellType.values().forEachIndexed spellFor@{index, spellType ->
+    val manaResults = mutableListOf<ManaResult>()
+    SpellType.values().forEachIndexed spellFor@{_, spellType ->
         // Check if spell can be casted (its not used, and player has enough mana)
 
-        // Make a deep copy of gameData for a new duel branch
+        // Make a deep copy of gameData for a new duel branch - as a storage reuse baseGameData to limit allocations
         val newGameData = gameData.deepClone(baseGameData)
 
         //
         // Player turn, cast a spell and apply damage from spells to boss
         if (part2) {
             newGameData.playerHp--
-            if (newGameData.playerHp <= 0) {
+            if (newGameData.playerHp <= 0)
                 return@spellFor
-            }
         }
 
         newGameData.activeSpells.forEach { spell -> spell.update(newGameData) }
         newGameData.activeSpells.removeAll { it.isComplete() }
 
-        if (newGameData.bossHp <= 0) {
-            manaResults.add(newGameData.spentMana)
-            return@spellFor
-        }
+        if (newGameData.bossHp <= 0)
+            manaResults.add(ManaResult(newGameData.spentMana, newGameData.spendManaSpells.toList()))
 
         if (newGameData.activeSpells.find { it.type == spellType } != null)
             return@spellFor
@@ -203,10 +208,11 @@ private fun fightWithBoss(gameData: WizardGameData, part2: Boolean,
         val spellFromType = createSpellFromType(spellType)
         newGameData.activeSpells.add(spellFromType)
         spellFromType.update(newGameData)
+        newGameData.spendManaSpells.add(spellFromType.type)
         newGameData.activeSpells.removeAll { it.isComplete() }
 
         if (newGameData.bossHp <= 0) {
-            manaResults.add(newGameData.spentMana)
+            manaResults.add(ManaResult(newGameData.spentMana, newGameData.spendManaSpells.toList()))
             return@spellFor
         }
 
@@ -215,7 +221,7 @@ private fun fightWithBoss(gameData: WizardGameData, part2: Boolean,
 
         newGameData.activeSpells.forEach { spell -> spell.update(newGameData) }
         if (newGameData.bossHp <= 0) {
-            manaResults.add(newGameData.spentMana)
+            manaResults.add(ManaResult(newGameData.spentMana, newGameData.spendManaSpells.toList()))
             return@spellFor
         }
 
@@ -230,15 +236,19 @@ private fun fightWithBoss(gameData: WizardGameData, part2: Boolean,
 
         // Start next round
         val manaRes = fightWithBoss(newGameData, part2, totalBestMinMana)
-        if (manaRes != -1)
+        if (!manaRes.failed) {
             manaResults.add(manaRes)
+        }
     }
-    val bestMinMana = manaResults.minOfOrNull{ it } ?: -1
-    if (bestMinMana != -1) {
-        if (bestMinMana < totalBestMinMana[0])
-            totalBestMinMana[0] = bestMinMana
+
+    val bestMinMana = manaResults.minOfWithOrNull({a,b -> a.mana - b.mana}, {a -> a} )
+    bestMinMana?.let { best ->
+        if (best.mana < totalBestMinMana.mana) {
+            totalBestMinMana.mana = best.mana
+            totalBestMinMana.spells = best.spells.toList()
+        }
     }
-    return bestMinMana
+    return bestMinMana ?: ManaResult(failed = true)
 }
 
 fun runday22() {
@@ -250,10 +260,13 @@ fun runday22() {
     //Damage: 8
     val bossHp = 55
     val bossDamage = 8
+    var manaResult: ManaResult
+    manaResult = calculateMinManaRequired(playerHp, playerMana,  bossHp, bossDamage, false)
     println("result for part 1: ${verifyResult(953,
-        calculateMinManaRequired(playerHp, playerMana,  bossHp, bossDamage, false))}")
+        manaResult.mana)} spells [sum=${manaResult.spells.fold(0){acc,st -> acc+st.mana}}]: ${manaResult.spells}")
+    manaResult = calculateMinManaRequired(playerHp, playerMana,  bossHp, bossDamage, true)
     println("result for part 2: ${verifyResult(1289,
-        calculateMinManaRequired(playerHp, playerMana,  bossHp, bossDamage, true))}")
+        manaResult.mana)} spells [sum=${manaResult.spells.fold(0){acc,st -> acc+st.mana}}]: ${manaResult.spells}")
 }
 
 
