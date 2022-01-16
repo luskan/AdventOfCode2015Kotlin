@@ -55,7 +55,7 @@ fun runday23() {
 
     val data = readAllText("/day23.txt")
     println("result for part 1: ${verifyResult(255, calculateProgramResult(data).b)}")
-    println("result for part 1: ${verifyResult(255, calculateProgramResult(data, true).b)}")
+    println("result for part 1: ${verifyResult(334, calculateProgramResult(data, true).b)}")
 }
 
 
