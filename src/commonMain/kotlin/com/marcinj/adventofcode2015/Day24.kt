@@ -8,7 +8,7 @@ fun calculateBestSolution(packagesList: MutableList<Int>, groups: MutableList<Mu
         if (value < 0)
             continue
 
-        for (k in 0 until groups.size) {
+        for (k in 0 until (groups.size - 1)) {
             val grSum = groups[k].sum()
             var doBreak = false
             if (grSum < groupWeight) {
@@ -21,7 +21,9 @@ fun calculateBestSolution(packagesList: MutableList<Int>, groups: MutableList<Mu
                     groups[k].add(value)
                     packagesList[i] = -packagesList[i]
 
-                    if ((packagesList.firstOrNull { it >= 0 } ?: 0) == 0) {
+                    //if ((packagesList.firstOrNull { it >= 0 } ?: 0) == 0)
+                    if (k == 1)
+                    {
                         val finalGroups = mutableListOf<MutableSet<Int>>()
                         groups.forEach { finalGroups.add(it.toMutableSet()) }
                         val grBestData = BestData(groups[0].fold(1UL){ acc, v -> acc * v.toULong()}, groups[0].size)
