@@ -43,30 +43,34 @@ fun calculateBestSolution(packagesList: MutableList<Int>,
                         groups.forEach { finalGroups.add(it.toMutableSet()) }
                         val grBestData = BestData(groups[0].fold(1UL){ acc, v -> acc * v.toULong()}, groups[0].size)
                         val gr = GroupResult(grBestData, finalGroups)
+                        var allowCalculateAllGroups = false
                         if (!correctGroups.contains(gr)) {
                             correctGroups.add(gr)
 
                             bestData.gr1Size = grBestData.gr1Size
                             bestData.gr1QE = grBestData.gr1QE
+                            allowCalculateAllGroups = true
                         }
-                        groups[k].remove(value)
-                        return 0
-                    }
-                    else {
-                        val newPackagesList = packagesList.toMutableList()
-                        newPackagesList.remove(value)
-                        val res = calculateBestSolution(newPackagesList, groups, groupWeight, correctGroups, depth + 1, bestData, cache)
-                        if (res == 0) {
-                            if (k > 0) {
-                                groups[k].remove(value)
-                                return 0
-                            }
-                        }
-                        if (res == -1 && depth > 0) {
+                        if (!allowCalculateAllGroups) {
                             groups[k].remove(value)
-                            return -1
+                            return 0
                         }
                     }
+
+                    val newPackagesList = packagesList.toMutableList()
+                    newPackagesList.remove(value)
+                    val res = calculateBestSolution(newPackagesList, groups, groupWeight, correctGroups, depth + 1, bestData, cache)
+                    if (res == 0) {
+                        if (k > 0) {
+                            groups[k].remove(value)
+                            return 0
+                        }
+                    }
+                    if (res == -1 && depth > 0) {
+                        groups[k].remove(value)
+                        return -1
+                    }
+
                     groups[k].remove(value)
                 }
                 doBreak = true
