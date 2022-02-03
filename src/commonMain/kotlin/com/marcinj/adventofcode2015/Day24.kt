@@ -3,21 +3,25 @@ package com.marcinj.adventofcode2015
 data class BestData(var gr1QE: ULong, var gr1Size: Int )
 data class GroupResult(var stats: BestData, var groups:MutableList<MutableSet<Int>>)
 
-fun calculateBestSolution(packagesList: MutableSet<Int>,
+fun calculateBestSolution(packagesList: MutableList<Int>,
                           groups: MutableList<MutableSet<Int>>,
                           groupWeight: Int,
                           correctGroups: MutableList<GroupResult>,
                           depth: Int,
                           bestData: BestData,
-                          cache: HashSet<MutableSet<Int>>): Int
+                          cache: HashSet<MutableList<Int>>): Int
 {
-    if (packagesList in cache)
-        return -1
-    else
-        cache.add(packagesList.toMutableSet())
+    if (packagesList in cache) {
+        val sum = groups[0].sum()
+        if (sum == groupWeight && groups[1].size == 0)
+            return -1
+    }
+    else {
+        cache.add(packagesList.toMutableList())
+    }
 
     for (value in packagesList) {
-        for (k in 0 until (groups.size-1)) {
+        for (k in 0 until (groups.size)) {
             val grSum = groups[k].sum()
             var doBreak = false
             if (grSum < groupWeight) {
@@ -31,9 +35,9 @@ fun calculateBestSolution(packagesList: MutableSet<Int>,
 
                     groups[k].add(value)
 
-                    // We dont fill all the groups, we leave the last one as it shoulr
-                    if (k == groups.size-2)
-                    //if (packagesList.size == 1)
+                    // We dont fill all the groups
+                    //if (k == groups.size-2)
+                    if (packagesList.size == 1)
                     {
                         val finalGroups = mutableListOf<MutableSet<Int>>()
                         groups.forEach { finalGroups.add(it.toMutableSet()) }
@@ -49,7 +53,7 @@ fun calculateBestSolution(packagesList: MutableSet<Int>,
                         return 0
                     }
                     else {
-                        val newPackagesList = packagesList.toMutableSet()
+                        val newPackagesList = packagesList.toMutableList()
                         newPackagesList.remove(value)
                         val res = calculateBestSolution(newPackagesList, groups, groupWeight, correctGroups, depth + 1, bestData, cache)
                         if (res == 0) {
@@ -67,8 +71,9 @@ fun calculateBestSolution(packagesList: MutableSet<Int>,
                 }
                 doBreak = true
             }
+
             // Fast abort if group 1 is worse than any previous ones.
-            if (k == 0 /* && grSum == groupWeight*/) {
+            if (k == 0) {
                 if (groups[k].size > bestData.gr1Size) {
                     return 0
                 }
@@ -93,8 +98,9 @@ fun calculateQuantumEntanglement(data: String, part2: Boolean = false): ULong {
 
     val groups = MutableList((if (part2) 4 else 3)) { index -> mutableSetOf<Int>() }
     val finalGroups = mutableListOf<GroupResult>()
-    calculateBestSolution(packagesList.toMutableSet(), groups, groupWeight,
-        finalGroups, 0, BestData(ULong.MAX_VALUE, Int.MAX_VALUE), HashSet())
+    val cache = HashSet<MutableList<Int>>()
+    calculateBestSolution(packagesList.toMutableList(), groups, groupWeight,
+        finalGroups, 0, BestData(ULong.MAX_VALUE, Int.MAX_VALUE), cache)
 
     finalGroups.sortWith(compareBy<GroupResult> { it.groups[0].size }.thenBy { it.stats.gr1QE })
 
