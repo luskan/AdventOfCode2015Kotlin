@@ -1,0 +1,18 @@
+# Project exclude paths
+/.gradle/
+/build/
+/build/classes/kotlin/jvm/main/
+/build/classes/kotlin/jvm/test/
+/build/classes/kotlin/macosX64/main/klib/
+/.idea/.gitignore
+/.idea/artifacts/AdventOfCode2015Kotlin_jvm_1_0_SNAPSHOT.xml
+/.idea/compiler.xml
+/.idea/gradle.xml
+/gradle/wrapper/gradle-wrapper.jar
+/gradle/wrapper/gradle-wrapper.properties
+/.idea/jarRepositories.xml
+/.idea/libraries-with-intellij-classes.xml
+/.idea/misc.xml
+/.idea/uiDesigner.xml
+/.idea/vcs.xml
+.DS_Store
